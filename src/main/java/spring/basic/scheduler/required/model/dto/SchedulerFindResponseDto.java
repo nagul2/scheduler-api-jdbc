@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
+/**
+ * 조회 시 사용되는 응답 DTO
+ */
 @Setter
 @Getter
 @AllArgsConstructor

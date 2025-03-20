@@ -6,6 +6,9 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 
+/**
+ * 일정 엔티티 - 필요한 필드만 생성할 수 있도록 빌더 패턴 사용
+ */
 @Builder
 @Getter
 @AllArgsConstructor
