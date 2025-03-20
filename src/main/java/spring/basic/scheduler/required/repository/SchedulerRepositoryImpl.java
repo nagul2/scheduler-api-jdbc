@@ -1,4 +1,4 @@
-package spring.basic.scheduler.repository;
+package spring.basic.scheduler.required.repository;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
@@ -8,9 +8,9 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
-import spring.basic.scheduler.model.dto.SchedulerFindResponseDto;
-import spring.basic.scheduler.model.dto.SchedulerSearchCond;
-import spring.basic.scheduler.model.entity.Schedule;
+import spring.basic.scheduler.required.model.dto.SchedulerFindResponseDto;
+import spring.basic.scheduler.required.model.dto.SchedulerSearchCond;
+import spring.basic.scheduler.required.model.entity.Schedule;
 
 import javax.sql.DataSource;
 import java.time.LocalDate;

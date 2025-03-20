@@ -1,4 +1,4 @@
-package spring.basic.scheduler.model.dto;
+package spring.basic.scheduler.required.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

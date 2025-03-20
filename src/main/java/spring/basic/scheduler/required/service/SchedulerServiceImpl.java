@@ -1,14 +1,14 @@
-package spring.basic.scheduler.service;
+package spring.basic.scheduler.required.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import spring.basic.scheduler.model.dto.SchedulerCreateRequestDto;
-import spring.basic.scheduler.model.dto.SchedulerCommonResponseDto;
-import spring.basic.scheduler.model.dto.SchedulerFindResponseDto;
-import spring.basic.scheduler.model.dto.SchedulerSearchCond;
-import spring.basic.scheduler.model.entity.Schedule;
-import spring.basic.scheduler.repository.SchedulerRepository;
+import spring.basic.scheduler.required.model.dto.SchedulerCreateRequestDto;
+import spring.basic.scheduler.required.model.dto.SchedulerCommonResponseDto;
+import spring.basic.scheduler.required.model.dto.SchedulerFindResponseDto;
+import spring.basic.scheduler.required.model.dto.SchedulerSearchCond;
+import spring.basic.scheduler.required.model.entity.Schedule;
+import spring.basic.scheduler.required.repository.SchedulerRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;

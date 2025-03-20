@@ -1,8 +1,8 @@
-package spring.basic.scheduler.repository;
+package spring.basic.scheduler.required.repository;
 
-import spring.basic.scheduler.model.dto.SchedulerFindResponseDto;
-import spring.basic.scheduler.model.dto.SchedulerSearchCond;
-import spring.basic.scheduler.model.entity.Schedule;
+import spring.basic.scheduler.required.model.dto.SchedulerFindResponseDto;
+import spring.basic.scheduler.required.model.dto.SchedulerSearchCond;
+import spring.basic.scheduler.required.model.entity.Schedule;
 
 import java.util.List;
 import java.util.Optional;

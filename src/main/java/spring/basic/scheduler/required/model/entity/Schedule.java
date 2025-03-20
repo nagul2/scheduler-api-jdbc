@@ -1,4 +1,4 @@
-package spring.basic.scheduler.model.entity;
+package spring.basic.scheduler.required.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
