@@ -6,7 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import spring.basic.scheduler.model.dto.SchedulerCreateRequestDto;
 import spring.basic.scheduler.model.dto.SchedulerCommonResponseDto;
+import spring.basic.scheduler.model.dto.SchedulerFindResponseDto;
+import spring.basic.scheduler.model.dto.SchedulerSearchCond;
 import spring.basic.scheduler.service.SchedulerService;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,4 +23,11 @@ public class SchedulerController {
     public ResponseEntity<SchedulerCommonResponseDto> addContent(@RequestBody SchedulerCreateRequestDto createRequestDto) {
         return new ResponseEntity<>(schedulerService.saveContent(createRequestDto), HttpStatus.CREATED);
     }
+
+    @GetMapping
+    public List<SchedulerFindResponseDto> schedules(SchedulerSearchCond searchCond) {
+        return schedulerService.findAllSchedules(searchCond);
+    }
+
+
 }

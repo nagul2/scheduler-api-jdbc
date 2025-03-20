@@ -5,10 +5,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.basic.scheduler.model.dto.SchedulerCreateRequestDto;
 import spring.basic.scheduler.model.dto.SchedulerCommonResponseDto;
+import spring.basic.scheduler.model.dto.SchedulerFindResponseDto;
+import spring.basic.scheduler.model.dto.SchedulerSearchCond;
 import spring.basic.scheduler.model.entity.Schedule;
 import spring.basic.scheduler.repository.SchedulerRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -31,5 +34,10 @@ public class SchedulerServiceImpl implements SchedulerService {
 
         Long savedContentId = schedulerRepository.saveContent(schedule);
         return new SchedulerCommonResponseDto(savedContentId);
+    }
+
+    @Override
+    public List<SchedulerFindResponseDto> findAllSchedules(SchedulerSearchCond searchCond) {
+        return schedulerRepository.findAllSchedules(searchCond);
     }
 }
