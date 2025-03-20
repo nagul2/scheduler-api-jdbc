@@ -20,7 +20,7 @@ public class SchedulerController {
     private final SchedulerService schedulerService;
 
     @PostMapping
-    public ResponseEntity<SchedulerCommonResponseDto> addContent(@RequestBody SchedulerCreateRequestDto createRequestDto) {
+    public ResponseEntity<SchedulerCommonResponseDto> addSchedule(@RequestBody SchedulerCreateRequestDto createRequestDto) {
         return new ResponseEntity<>(schedulerService.saveSchedule(createRequestDto), HttpStatus.CREATED);
     }
 
@@ -33,5 +33,4 @@ public class SchedulerController {
     public ResponseEntity<SchedulerFindResponseDto> findSchedule(@PathVariable Long id) {
         return new ResponseEntity<>(schedulerService.findScheduleById(id), HttpStatus.OK);
     }
-
 }
