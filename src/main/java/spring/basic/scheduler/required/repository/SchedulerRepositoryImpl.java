@@ -73,7 +73,7 @@ public class SchedulerRepositoryImpl implements SchedulerRepository {
             query += " name = :condName";   // 작성자 이름 같은 일정 조회
         }
 
-        query += " order by update_date desc";  // 마지막 수정일 기준 내림차순 조회
+        query += " order by update_date desc";
 
         return jdbcTemplate.query(query, param, scheduleRowMapper());
     }
