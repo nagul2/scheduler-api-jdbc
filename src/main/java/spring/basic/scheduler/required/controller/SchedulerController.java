@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import spring.basic.scheduler.required.model.dto.SchedulerCommonRequestDto;
-import spring.basic.scheduler.required.model.dto.SchedulerCommonResponseDto;
-import spring.basic.scheduler.required.model.dto.SchedulerFindResponseDto;
-import spring.basic.scheduler.required.model.dto.SchedulerSearchCond;
+import spring.basic.scheduler.required.model.dto.*;
 import spring.basic.scheduler.required.service.SchedulerService;
 
 import java.util.List;
@@ -40,4 +37,9 @@ public class SchedulerController {
         return new ResponseEntity<>(schedulerService.updateSchedule(id, commonRequestDto), HttpStatus.OK);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSchedule(@PathVariable Long id, @RequestBody SchedulerDeleteRequestDto deleteDto) {
+        schedulerService.deleteSchedule(id, deleteDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

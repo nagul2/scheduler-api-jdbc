@@ -107,6 +107,14 @@ public class SchedulerRepositoryImpl implements SchedulerRepository {
         return jdbcTemplate.update(query, param);
     }
 
+    @Override
+    public int deleteSchedule(Long id) {
+        String query = "delete from schedule where id = :id";
+        SqlParameterSource param = new MapSqlParameterSource()
+                .addValue("id", id);
+        return jdbcTemplate.update(query, param);
+    }
+
     private RowMapper<SchedulerFindResponseDto> scheduleRowMapper() {
         return BeanPropertyRowMapper.newInstance(SchedulerFindResponseDto.class);
     }

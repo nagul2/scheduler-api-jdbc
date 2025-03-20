@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import spring.basic.scheduler.required.model.dto.SchedulerCommonRequestDto;
-import spring.basic.scheduler.required.model.dto.SchedulerCommonResponseDto;
-import spring.basic.scheduler.required.model.dto.SchedulerFindResponseDto;
-import spring.basic.scheduler.required.model.dto.SchedulerSearchCond;
+import spring.basic.scheduler.required.model.dto.*;
 import spring.basic.scheduler.required.model.entity.Schedule;
 import spring.basic.scheduler.required.repository.SchedulerRepository;
 
@@ -73,6 +70,18 @@ public class SchedulerServiceImpl implements SchedulerService {
         }
         // 수정완료 되면 id값 반환
         return new SchedulerCommonResponseDto(id);
+    }
+
+    @Override
+    @Transactional
+    public void deleteSchedule(Long id, SchedulerDeleteRequestDto deleteDto) {
+        String findPassword = schedulerRepository.findPasswordById(id);
+
+        // 필수 구현에서는 별도 예외 처리 없이 비밀번호를 못찾거나 비밀번호가 안맞으면 그냥 리턴 -> 도전에서 예외처리하면서 상태코드 반환 예정
+        if (!StringUtils.hasText(findPassword) || !findPassword.equals(deleteDto.getPassword())) {
+            return ;
+        }
+        schedulerRepository.deleteSchedule(id);
     }
 
 }
