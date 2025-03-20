@@ -29,5 +29,8 @@ public class SchedulerController {
         return schedulerService.findAllSchedules(searchCond);
     }
 
-
+    @GetMapping("/{id}")
+    public SchedulerFindResponseDto schedule(@PathVariable Long id) {
+        return schedulerService.findScheduleById(id);
+    }
 }

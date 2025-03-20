@@ -12,6 +12,7 @@ import spring.basic.scheduler.repository.SchedulerRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,5 +40,17 @@ public class SchedulerServiceImpl implements SchedulerService {
     @Override
     public List<SchedulerFindResponseDto> findAllSchedules(SchedulerSearchCond searchCond) {
         return schedulerRepository.findAllSchedules(searchCond);
+    }
+
+    @Override
+    public SchedulerFindResponseDto findScheduleById(Long id) {
+        Optional<SchedulerFindResponseDto> optionalFindSchedule = schedulerRepository.findScheduleById(id);
+
+        // LV1은 예외 처리 없음
+        if (optionalFindSchedule.isEmpty()) {
+            return null;
+        }
+
+        return optionalFindSchedule.get();
     }
 }

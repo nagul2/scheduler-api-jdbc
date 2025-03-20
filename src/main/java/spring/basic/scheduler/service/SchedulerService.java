@@ -11,4 +11,6 @@ public interface SchedulerService {
     SchedulerCommonResponseDto saveContent(SchedulerCreateRequestDto CreateRequestDto);
 
     List<SchedulerFindResponseDto> findAllSchedules(SchedulerSearchCond searchCond);
+
+    SchedulerFindResponseDto findScheduleById(Long id);
 }

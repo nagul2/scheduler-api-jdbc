@@ -2,9 +2,13 @@ package spring.basic.scheduler.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Setter
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class SchedulerCommonResponseDto {
-    private final Long id;
+    private Long id;
 }

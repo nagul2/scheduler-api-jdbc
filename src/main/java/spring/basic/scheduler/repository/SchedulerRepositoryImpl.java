@@ -15,6 +15,8 @@ import spring.basic.scheduler.model.entity.Schedule;
 import javax.sql.DataSource;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class SchedulerRepositoryImpl implements SchedulerRepository {
@@ -43,7 +45,7 @@ public class SchedulerRepositoryImpl implements SchedulerRepository {
 
         SqlParameterSource param = new BeanPropertySqlParameterSource(searchCond);
 
-        String query = "select * from schedule";
+        String query = "select id, content, name, update_date from schedule";
 
         // 동적 쿼리 작성하기
         // 날짜가 null이 아니거나 이름이 null, 길이 0, 공백 문자만으로 구성되어있지 않으면!
@@ -64,8 +66,18 @@ public class SchedulerRepositoryImpl implements SchedulerRepository {
             query += " name = :condName";
         }
 
-
         return jdbcTemplate.query(query, param, scheduleRowMapper());
+    }
+
+    @Override
+    public Optional<SchedulerFindResponseDto> findScheduleById(Long id) {
+        String query = "select id, content, name, update_date from schedule where id = :id";
+
+        Map<String, Long> param = Map.of("id", id);
+        List<SchedulerFindResponseDto> findScheduleDto = jdbcTemplate.query(query, param, scheduleRowMapper());
+
+        // Optional 반환
+        return findScheduleDto.stream().findAny();
     }
 
     private RowMapper<SchedulerFindResponseDto> scheduleRowMapper() {
