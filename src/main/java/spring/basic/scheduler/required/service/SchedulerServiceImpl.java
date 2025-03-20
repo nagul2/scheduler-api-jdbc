@@ -23,7 +23,7 @@ public class SchedulerServiceImpl implements SchedulerService {
 
     @Override
     @Transactional
-    public SchedulerCommonResponseDto saveContent(SchedulerCreateRequestDto createRequestDto) {
+    public SchedulerCommonResponseDto saveSchedule(SchedulerCreateRequestDto createRequestDto) {
 
         Schedule schedule = Schedule.builder()
                 .content(createRequestDto.getContent())
@@ -53,4 +53,6 @@ public class SchedulerServiceImpl implements SchedulerService {
 
         return optionalFindSchedule.get();
     }
+
+
 }
