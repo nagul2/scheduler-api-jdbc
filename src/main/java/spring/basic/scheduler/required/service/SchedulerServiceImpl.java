@@ -33,7 +33,7 @@ public class SchedulerServiceImpl implements SchedulerService {
                 .updateDate(LocalDateTime.now())
                 .build();
 
-        Long savedContentId = schedulerRepository.saveContent(schedule);
+        Long savedContentId = schedulerRepository.saveSchedule(schedule);
         return new SchedulerCommonResponseDto(savedContentId);
     }
 
@@ -53,6 +53,5 @@ public class SchedulerServiceImpl implements SchedulerService {
 
         return optionalFindSchedule.get();
     }
-
 
 }

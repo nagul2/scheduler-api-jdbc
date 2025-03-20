@@ -32,7 +32,7 @@ public class SchedulerRepositoryImpl implements SchedulerRepository {
     }
 
     @Override
-    public Long saveContent(Schedule schedule) {
+    public Long saveSchedule(Schedule schedule) {
         SqlParameterSource param = new BeanPropertySqlParameterSource(schedule);
         Number key = jdbcInsert.executeAndReturnKey(param);
         return key.longValue();
@@ -55,7 +55,7 @@ public class SchedulerRepositoryImpl implements SchedulerRepository {
 
         boolean andFlag = false;
         if (condDate != null) {
-            query += " update_date = :condDate";
+            query += " update_date like concat(:condDate, '%')";
             andFlag = true;
         }
 

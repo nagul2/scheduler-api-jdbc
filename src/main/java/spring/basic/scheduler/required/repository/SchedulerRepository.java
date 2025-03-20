@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface SchedulerRepository {
-    Long saveContent(Schedule schedule);
+    Long saveSchedule(Schedule schedule);
 
     List<SchedulerFindResponseDto> findAllSchedules(SchedulerSearchCond searchCond);
 
