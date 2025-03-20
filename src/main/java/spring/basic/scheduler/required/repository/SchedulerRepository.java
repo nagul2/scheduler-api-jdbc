@@ -14,4 +14,9 @@ public interface SchedulerRepository {
 
     Optional<SchedulerFindResponseDto> findScheduleById(Long id);
 
+    String findPasswordById(Long id);
+
+    int updateSchedule(Long id, String content, String name);
+
+    int deleteSchedule(Long id);
 }
