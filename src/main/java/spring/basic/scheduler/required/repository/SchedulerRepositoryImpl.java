@@ -1,8 +1,10 @@
 package spring.basic.scheduler.required.repository;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -78,6 +80,31 @@ public class SchedulerRepositoryImpl implements SchedulerRepository {
 
         // Optional 반환
         return findScheduleDto.stream().findAny();
+    }
+
+    @Override
+    public String findPasswordById(Long id) {
+        String query = "select password from schedule where id = :id";
+        Map<String, Long> param = Map.of("id", id);
+
+        // 단건을 조회하면 queryForObject는 못찾으면 EmptyResultDataAccessException이 발생한다고 함
+        try {
+            return jdbcTemplate.queryForObject(query, param, String.class);
+        } catch(EmptyResultDataAccessException e) {
+            return null;    // 못찾으면 null
+        }
+    }
+
+    @Override
+    public int updateSchedule(Long id, String content, String name) {
+        String query = "update schedule set content = :content, name = :name, update_date = now() where id = :id";
+
+        SqlParameterSource param = new MapSqlParameterSource()
+                .addValue("id", id)
+                .addValue("content", content)
+                .addValue("name", name);
+
+        return jdbcTemplate.update(query, param);
     }
 
     private RowMapper<SchedulerFindResponseDto> scheduleRowMapper() {

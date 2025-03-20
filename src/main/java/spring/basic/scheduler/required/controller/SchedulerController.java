@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import spring.basic.scheduler.required.model.dto.SchedulerCreateRequestDto;
+import spring.basic.scheduler.required.model.dto.SchedulerCommonRequestDto;
 import spring.basic.scheduler.required.model.dto.SchedulerCommonResponseDto;
 import spring.basic.scheduler.required.model.dto.SchedulerFindResponseDto;
 import spring.basic.scheduler.required.model.dto.SchedulerSearchCond;
@@ -20,8 +20,8 @@ public class SchedulerController {
     private final SchedulerService schedulerService;
 
     @PostMapping
-    public ResponseEntity<SchedulerCommonResponseDto> addSchedule(@RequestBody SchedulerCreateRequestDto createRequestDto) {
-        return new ResponseEntity<>(schedulerService.saveSchedule(createRequestDto), HttpStatus.CREATED);
+    public ResponseEntity<SchedulerCommonResponseDto> addSchedule(@RequestBody SchedulerCommonRequestDto commonRequestDto) {
+        return new ResponseEntity<>(schedulerService.saveSchedule(commonRequestDto), HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -33,4 +33,11 @@ public class SchedulerController {
     public ResponseEntity<SchedulerFindResponseDto> findSchedule(@PathVariable Long id) {
         return new ResponseEntity<>(schedulerService.findScheduleById(id), HttpStatus.OK);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<SchedulerCommonResponseDto> updateSchedule(@PathVariable Long id,
+                                                                     @RequestBody SchedulerCommonRequestDto commonRequestDto) {
+        return new ResponseEntity<>(schedulerService.updateSchedule(id, commonRequestDto), HttpStatus.OK);
+    }
+
 }

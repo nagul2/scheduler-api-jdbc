@@ -3,7 +3,8 @@ package spring.basic.scheduler.required.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import spring.basic.scheduler.required.model.dto.SchedulerCreateRequestDto;
+import org.springframework.util.StringUtils;
+import spring.basic.scheduler.required.model.dto.SchedulerCommonRequestDto;
 import spring.basic.scheduler.required.model.dto.SchedulerCommonResponseDto;
 import spring.basic.scheduler.required.model.dto.SchedulerFindResponseDto;
 import spring.basic.scheduler.required.model.dto.SchedulerSearchCond;
@@ -23,18 +24,18 @@ public class SchedulerServiceImpl implements SchedulerService {
 
     @Override
     @Transactional
-    public SchedulerCommonResponseDto saveSchedule(SchedulerCreateRequestDto createRequestDto) {
+    public SchedulerCommonResponseDto saveSchedule(SchedulerCommonRequestDto commonRequestDto) {
 
         Schedule schedule = Schedule.builder()
-                .content(createRequestDto.getContent())
-                .name(createRequestDto.getName())
-                .password(createRequestDto.getPassword())
+                .content(commonRequestDto.getContent())
+                .name(commonRequestDto.getName())
+                .password(commonRequestDto.getPassword())
                 .createDate(LocalDateTime.now())
                 .updateDate(LocalDateTime.now())
                 .build();
 
-        Long savedContentId = schedulerRepository.saveSchedule(schedule);
-        return new SchedulerCommonResponseDto(savedContentId);
+        Long savedScheduleId = schedulerRepository.saveSchedule(schedule);
+        return new SchedulerCommonResponseDto(savedScheduleId);
     }
 
     @Override
@@ -46,12 +47,32 @@ public class SchedulerServiceImpl implements SchedulerService {
     public SchedulerFindResponseDto findScheduleById(Long id) {
         Optional<SchedulerFindResponseDto> optionalFindSchedule = schedulerRepository.findScheduleById(id);
 
-        // LV1은 예외 처리 없음
+        // 필수 예외 처리 없음 -> 도전에서 예외처리 강화하면서 상태코드 반환 예정
         if (optionalFindSchedule.isEmpty()) {
             return null;
         }
 
         return optionalFindSchedule.get();
+    }
+
+    @Override
+    @Transactional
+    public SchedulerCommonResponseDto updateSchedule(Long id, SchedulerCommonRequestDto commonRequestDto) {
+        String findPassword = schedulerRepository.findPasswordById(id);
+
+        // 필수 구현에서는 별도 예외 처리 없이 비밀번호를 못찾거나 비밀번호가 안맞으면 null을 반환함 -> 도전에서 예외처리하면서 상태코드 반환 예정
+        if (!StringUtils.hasText(findPassword) || !findPassword.equals(commonRequestDto.getPassword())) {
+            return null;
+        }
+
+        int updatedRow = schedulerRepository.updateSchedule(id, commonRequestDto.getContent(), commonRequestDto.getName());
+
+        // 필수 구현에서는 일단 수정된 값이 없으면 null로 반환
+        if (updatedRow == 0) {
+            return null;
+        }
+        // 수정완료 되면 id값 반환
+        return new SchedulerCommonResponseDto(id);
     }
 
 }
