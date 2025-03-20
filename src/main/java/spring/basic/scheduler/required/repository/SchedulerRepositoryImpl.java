@@ -66,6 +66,8 @@ public class SchedulerRepositoryImpl implements SchedulerRepository {
             query += " name = :condName";
         }
 
+        query += " order by update_date desc";
+
         return jdbcTemplate.query(query, param, scheduleRowMapper());
     }
 
