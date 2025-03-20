@@ -13,4 +13,5 @@ public interface SchedulerRepository {
     List<SchedulerFindResponseDto> findAllSchedules(SchedulerSearchCond searchCond);
 
     Optional<SchedulerFindResponseDto> findScheduleById(Long id);
+
 }

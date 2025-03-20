@@ -21,16 +21,17 @@ public class SchedulerController {
 
     @PostMapping
     public ResponseEntity<SchedulerCommonResponseDto> addContent(@RequestBody SchedulerCreateRequestDto createRequestDto) {
-        return new ResponseEntity<>(schedulerService.saveContent(createRequestDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(schedulerService.saveSchedule(createRequestDto), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public List<SchedulerFindResponseDto> schedules(SchedulerSearchCond searchCond) {
+    public List<SchedulerFindResponseDto> findSchedules(SchedulerSearchCond searchCond) {
         return schedulerService.findAllSchedules(searchCond);
     }
 
     @GetMapping("/{id}")
-    public SchedulerFindResponseDto schedule(@PathVariable Long id) {
-        return schedulerService.findScheduleById(id);
+    public ResponseEntity<SchedulerFindResponseDto> findSchedule(@PathVariable Long id) {
+        return new ResponseEntity<>(schedulerService.findScheduleById(id), HttpStatus.OK);
     }
+
 }
