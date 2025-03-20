@@ -1,0 +1,14 @@
+package spring.basic.scheduler.required.model.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public class SchedulerCommonResponseDto {
+    private Long id;
+}
