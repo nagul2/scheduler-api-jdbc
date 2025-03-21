@@ -1,30 +1,30 @@
-package spring.basic.scheduler.required.controller;
+package spring.basic.scheduler.challenge.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import spring.basic.scheduler.required.model.dto.*;
-import spring.basic.scheduler.required.service.SchedulerService;
+import spring.basic.scheduler.challenge.model.dto.*;
+import spring.basic.scheduler.challenge.service.SchedulerService;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/required/scheduler")
-public class SchedulerController {
+@RequestMapping("/advanced/scheduler")
+public class SchedulerControllerV2 {
 
     private final SchedulerService schedulerService;
 
     /**
      * 일정 등록(생성) API
      *
-     * @param commonRequestDto 일정 등록/수정 시 공통으로 사용하는 DTO
+     * @param createRequestDto 일정 등록/수정 시 공통으로 사용하는 DTO
      * @return 생성된 일정의 ID와 응답코드를 반환
      */
     @PostMapping
-    public ResponseEntity<SchedulerCommonResponseDto> addSchedule(@RequestBody SchedulerCommonRequestDto commonRequestDto) {
-        return new ResponseEntity<>(schedulerService.saveSchedule(commonRequestDto), HttpStatus.CREATED);
+    public ResponseEntity<SchedulerCommonResponseDto> addSchedule(@RequestBody SchedulerCreateRequestDto createRequestDto) {
+        return new ResponseEntity<>(schedulerService.saveSchedule(createRequestDto), HttpStatus.CREATED);
     }
 
     /**
@@ -35,8 +35,8 @@ public class SchedulerController {
      * @return 조회된 일정을 리스트로 반환하고 응답코드를 반환
      */
     @GetMapping
-    public List<SchedulerFindResponseDto> findSchedules(SchedulerSearchCond searchCond) {
-        return schedulerService.findAllSchedules(searchCond);
+    public ResponseEntity<List<SchedulerFindResponseDto>> findSchedules(SchedulerSearchCond searchCond) {
+        return new ResponseEntity<>(schedulerService.findAllSchedules(searchCond), HttpStatus.OK);
     }
 
     /**
@@ -54,13 +54,13 @@ public class SchedulerController {
      * 일정 수정 API
      *
      * @param id 수정 할 일정의 ID
-     * @param commonRequestDto 일정 등록/수정 시 공통으로 사용하는 DTO
+     * @param updateRequestDto 일정 등록/수정 시 공통으로 사용하는 DTO
      * @return 수정된 일정의 ID와 응답코드 반환
      */
     @PutMapping("/{id}")
     public ResponseEntity<SchedulerCommonResponseDto> updateSchedule(@PathVariable Long id,
-                                                                     @RequestBody SchedulerCommonRequestDto commonRequestDto) {
-        return new ResponseEntity<>(schedulerService.updateSchedule(id, commonRequestDto), HttpStatus.OK);
+                                                                     @RequestBody SchedulerUpdateRequestDto updateRequestDto) {
+        return new ResponseEntity<>(schedulerService.updateSchedule(id, updateRequestDto), HttpStatus.OK);
     }
 
     /**
