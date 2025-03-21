@@ -11,7 +11,7 @@ public interface SchedulerService {
 
     SchedulerFindResponseDto findScheduleById(Long id);
 
-    SchedulerCommonResponseDto updateSchedule(Long id, SchedulerCommonRequestDto commonRequestDto);
+    SchedulerCommonResponseDto updateSchedule(Long id, SchedulerUpdateRequestDto updateRequestDto);
 
     void deleteSchedule(Long id, SchedulerDeleteRequestDto deleteDto);
 }

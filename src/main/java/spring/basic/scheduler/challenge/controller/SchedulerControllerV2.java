@@ -54,13 +54,13 @@ public class SchedulerControllerV2 {
      * 일정 수정 API
      *
      * @param id 수정 할 일정의 ID
-     * @param commonRequestDto 일정 등록/수정 시 공통으로 사용하는 DTO
+     * @param updateRequestDto 일정 등록/수정 시 공통으로 사용하는 DTO
      * @return 수정된 일정의 ID와 응답코드 반환
      */
     @PutMapping("/{id}")
     public ResponseEntity<SchedulerCommonResponseDto> updateSchedule(@PathVariable Long id,
-                                                                     @RequestBody SchedulerCommonRequestDto commonRequestDto) {
-        return new ResponseEntity<>(schedulerService.updateSchedule(id, commonRequestDto), HttpStatus.OK);
+                                                                     @RequestBody SchedulerUpdateRequestDto updateRequestDto) {
+        return new ResponseEntity<>(schedulerService.updateSchedule(id, updateRequestDto), HttpStatus.OK);
     }
 
     /**

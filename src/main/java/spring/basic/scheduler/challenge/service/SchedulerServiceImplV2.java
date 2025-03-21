@@ -64,24 +64,39 @@ public class SchedulerServiceImplV2 implements SchedulerService {
         return optionalFindSchedule.get();  // 조회한 일정을 반환, 검증로직을 거쳤으므로 .get()으로 바로 반환
     }
 
+
     @Override
     @Transactional
-    public SchedulerCommonResponseDto updateSchedule(Long id, SchedulerCommonRequestDto commonRequestDto) {
+    public SchedulerCommonResponseDto updateSchedule(Long id, SchedulerUpdateRequestDto updateRequestDto) {
 
         // 패스워드 검증
         String findPassword = schedulerRepository.findPasswordById(id);
 
         // 필수 구현에서는 별도 예외 처리 없이 비밀번호를 못찾거나 비밀번호가 안맞으면 null을 반환함 -> 도전에서 예외처리하면서 상태코드 반환 예정
-        if (!StringUtils.hasText(findPassword) || !findPassword.equals(commonRequestDto.getPassword())) {
+        if (!StringUtils.hasText(findPassword) || !findPassword.equals(updateRequestDto.getPassword())) {
             return null;
         }
 
-        int updatedRow = schedulerRepository.updateSchedule(id, commonRequestDto.getContent(), commonRequestDto.getName());
+        int updatedRow;
+
+        if (StringUtils.hasText(updateRequestDto.getContent()) && !StringUtils.hasText(updateRequestDto.getName())) {
+            // 일정만 수정
+            updatedRow = schedulerRepository.updateScheduleContent(id, updateRequestDto.getContent());
+
+        } else if (StringUtils.hasText(updateRequestDto.getName()) && !StringUtils.hasText(updateRequestDto.getContent())) {
+            // 이름만 수정
+            updatedRow = schedulerRepository.updateWriterName(id, updateRequestDto.getName());
+
+        } else {
+            // 전체 수정
+            updatedRow = schedulerRepository.updateScheduleContentWithWriterName(id, updateRequestDto.getContent(), updateRequestDto.getName());
+        }
 
         // 필수 구현에서는 일단 수정된 값이 없으면 null로 반환
         if (updatedRow == 0) {
             return null;
         }
+
         // 수정완료 되면 id값 반환
         return new SchedulerCommonResponseDto(id);
     }

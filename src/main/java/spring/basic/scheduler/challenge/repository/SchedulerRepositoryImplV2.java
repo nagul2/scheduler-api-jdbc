@@ -48,7 +48,6 @@ public class SchedulerRepositoryImplV2 implements SchedulerRepository {
      */
     @Override
     public Long saveWriter(Writer writer) {
-        // schedule, writer 쿼리를 두 번 날려야 함
         SqlParameterSource writerParam = new BeanPropertySqlParameterSource(writer);
         Number writerKey = writerJdbcInsert.executeAndReturnKey(writerParam);
         return writerKey.longValue();
@@ -124,22 +123,72 @@ public class SchedulerRepositoryImplV2 implements SchedulerRepository {
 
     @Override
     public String findPasswordById(Long id) {
-        String query = "select password from schedule where id = :id";
+        String query = "select password from Schedule where id = :id";
         Map<String, Long> param = Map.of("id", id);
 
         // 단건을 조회하는 queryForObject는 못찾으면 EmptyResultDataAccessException이 발생한다고 함
         try {
             return jdbcTemplate.queryForObject(query, param, String.class);
-        } catch(EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             return null;    // 못찾으면 null
         }
     }
 
-
+    /**
+     * 일정만 수정, 작성자 테이블의 수정일은 최신화
+     *
+     * @param id 수정할 일정의 ID
+     * @param content 수정할 내용
+     * @return 수정된 행의 개수
+     */
     @Override
-    public int updateSchedule(Long id, String content, String name) {
-        // 업데이트 후 수정일을 변경한 시간으로 업데이트
-        String query = "update schedule set content = :content, name = :name, update_date = now() where id = :id";
+    public int updateScheduleContent(Long id, String content) {
+        String query = "update schedule as s" +
+                " join writer as w" +
+                " on s.id = w.id" +
+                " set s.content = :content, w.update_date = now()" +
+                " where s.id = :id";
+
+        SqlParameterSource param = new MapSqlParameterSource()
+                .addValue("id", id)
+                .addValue("content", content);
+
+        return jdbcTemplate.update(query, param);
+    }
+
+    /**
+     * 작성자만 수정, 작성자 테이블의 수정일은 최신화
+     *
+     * @param id 수정할 일정의 ID
+     * @param name 수정할 작성자 이름
+     * @return 수정된 행의 개수
+     */
+    @Override
+    public int updateWriterName(Long id, String name) {
+        String query = "update writer set name = :name, update_date = now() where id = :id";
+
+        SqlParameterSource param = new MapSqlParameterSource()
+                .addValue("id", id)
+                .addValue("name", name);
+
+        return jdbcTemplate.update(query, param);
+    }
+
+    /**
+     * 작성자, 일정 모두 수정, 수정일 최신화
+     *
+     * @param id 수정할 일정의 ID
+     * @param content 수정할 일정
+     * @param name 수정할 작성자 이름
+     * @return 수정된 행의 개수
+     */
+    @Override
+    public int updateScheduleContentWithWriterName(Long id, String content, String name) {
+        String query = "update schedule as s" +
+                " join writer as w" +
+                " on s.id = w.id" +
+                " set s.content = :content, w.name = :name, w.update_date = now()" +
+                " where s.id = :id";
 
         SqlParameterSource param = new MapSqlParameterSource()
                 .addValue("id", id)
@@ -165,4 +214,5 @@ public class SchedulerRepositoryImplV2 implements SchedulerRepository {
     private RowMapper<SchedulerFindResponseDto> scheduleRowMapper() {
         return BeanPropertyRowMapper.newInstance(SchedulerFindResponseDto.class);
     }
+
 }

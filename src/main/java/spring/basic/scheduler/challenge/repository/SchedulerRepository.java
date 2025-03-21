@@ -18,7 +18,11 @@ public interface SchedulerRepository {
 
     String findPasswordById(Long id);
 
-    int updateSchedule(Long id, String content, String name);
+    int updateScheduleContent(Long id, String content);
+
+    int updateWriterName(Long id, String name);
+
+    int updateScheduleContentWithWriterName(Long id, String content, String name);
 
     int deleteSchedule(Long id);
 
