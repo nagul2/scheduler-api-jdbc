@@ -13,8 +13,8 @@ create table schedule
 create table writer
 (
     id          bigint auto_increment primary key comment '작성자 식별자',
-    name        varchar(10) comment '작성자',
-    email       varchar(50) comment 'email',
+    name        varchar(10) not null comment '작성자',
+    email       varchar(50) not null comment 'email',
     create_date datetime comment '생성일',
     update_date datetime comment '수정일'
 )
@@ -22,9 +22,10 @@ create table writer
 create table schedule
 (
     id        bigint auto_increment primary key comment '일정 식별자',
-    writer_id bigint not null comment '작성자 외래키',
+    writer_id bigint      not null comment '작성자 외래키',
     content   varchar(255) comment '할일',
-    password  varchar(40) comment '비밀번호',
+    password  varchar(40) not null comment '비밀번호',
     foreign key (writer_id) references writer (id)
 )
+
 
