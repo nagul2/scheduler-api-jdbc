@@ -71,12 +71,15 @@ public class SchedulerRepositoryImplV2 implements SchedulerRepository {
     @Override
     public List<SchedulerFindResponseDto> findAllSchedules(SchedulerSearchCond searchCond) {
         LocalDate condDate = searchCond.getCondDate();  // 날짜 검색 조건
-        String condName = searchCond.getCondName();     // 이름 검색 조
+        String condName = searchCond.getCondName();     // 이름 검색 조건
 
         SqlParameterSource param = new BeanPropertySqlParameterSource(searchCond);
 
         // 동적 쿼리 시작
-        String query = "select id, content, name, update_date from schedule";
+        String query = "select s.id, w.id, s.content, w.name, w.update_date" +
+                " from schedule as s" +
+                " join writer as w" +
+                " on s.id = w.id";
 
         // 동적 쿼리 작성하기
         // 날짜가 null이 아니거나 이름이 null, 길이 0, 공백 문자만으로 구성되어있지 않으면 -> 즉 동적 쿼리 조건이 있으면 where 붙이기
@@ -106,7 +109,11 @@ public class SchedulerRepositoryImplV2 implements SchedulerRepository {
 
     @Override
     public Optional<SchedulerFindResponseDto> findScheduleById(Long id) {
-        String query = "select id, content, name, update_date from schedule where id = :id";
+        String query = "select s.id, w.id, s.content, w.name, w.update_date" +
+                " from schedule as s" +
+                " join writer as w" +
+                " on s.id = w.id" +
+                " where s.id = :id";
 
         Map<String, Long> param = Map.of("id", id);
         List<SchedulerFindResponseDto> findScheduleDto = jdbcTemplate.query(query, param, scheduleRowMapper());
