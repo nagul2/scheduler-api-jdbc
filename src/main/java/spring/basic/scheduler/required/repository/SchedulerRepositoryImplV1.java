@@ -21,12 +21,12 @@ import java.util.Map;
 import java.util.Optional;
 
 @Repository
-public class SchedulerRepositoryImpl implements SchedulerRepository {
+public class SchedulerRepositoryImplV1 implements SchedulerRepository {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
-    public SchedulerRepositoryImpl(DataSource dataSource) {
+    public SchedulerRepositoryImplV1(DataSource dataSource) {
         // 바인딩 순서로 쿼리하면 버그가 생길 수 있으므로 파라미터 이름으로 쿼리를 할 수 있는 JdbcTemplate
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         this.jdbcInsert = new SimpleJdbcInsert(dataSource)  // Insert 편의 기능 활용

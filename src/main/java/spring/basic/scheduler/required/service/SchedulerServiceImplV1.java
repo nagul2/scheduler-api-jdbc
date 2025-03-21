@@ -18,7 +18,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class SchedulerServiceImpl implements SchedulerService {
+public class SchedulerServiceImplV1 implements SchedulerService {
 
     private final SchedulerRepository schedulerRepository;
 
