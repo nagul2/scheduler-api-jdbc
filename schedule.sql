@@ -23,8 +23,8 @@ create table schedule
 (
     id        bigint auto_increment primary key comment '일정 식별자',
     writer_id bigint      not null comment '작성자 외래키',
-    content   varchar(255) comment '할일',
-    password  varchar(40) not null comment '비밀번호',
+    content   varchar(255) not null comment '할일',
+    password  varchar(255) not null comment '비밀번호',
     foreign key (writer_id) references writer (id)
 )
 

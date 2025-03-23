@@ -1,13 +1,13 @@
 package spring.basic.scheduler.challenge.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import spring.basic.scheduler.challenge.model.dto.*;
-
-import java.util.List;
 
 public interface SchedulerService {
     SchedulerCommonResponseDto saveSchedule(SchedulerCreateRequestDto createRequestDto);
 
-    List<SchedulerFindResponseDto> findAllSchedules(SchedulerSearchCond searchCond);
+    Page<SchedulerFindResponseDto> findAllSchedules(SchedulerSearchCond searchCond, Pageable pageable);
 
     SchedulerFindResponseDto findScheduleById(Long id);
 

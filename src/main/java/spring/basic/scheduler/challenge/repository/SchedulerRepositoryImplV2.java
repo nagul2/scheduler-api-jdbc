@@ -1,6 +1,9 @@
 package spring.basic.scheduler.challenge.repository;
 
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -66,9 +69,9 @@ public class SchedulerRepositoryImplV2 implements SchedulerRepository {
         return schedulerKey.longValue(); // 생성한 key 값을 long 타입으로 변환해서 반환
     }
 
-
     @Override
-    public List<SchedulerFindResponseDto> findAllSchedules(SchedulerSearchCond searchCond) {
+    public Page<SchedulerFindResponseDto> findAllSchedules(SchedulerSearchCond searchCond, Pageable pageable) {
+
         LocalDate condDate = searchCond.getCondDate();  // 날짜 검색 조건
         String condName = searchCond.getCondName();     // 이름 검색 조건
 
@@ -80,16 +83,20 @@ public class SchedulerRepositoryImplV2 implements SchedulerRepository {
                 " join writer as w" +
                 " on s.id = w.id";
 
+        String allCountQuery = "select count(*) from schedule as s join writer as w on s.id = w.id";
+
         // 동적 쿼리 작성하기
         // 날짜가 null이 아니거나 이름이 null, 길이 0, 공백 문자만으로 구성되어있지 않으면 -> 즉 동적 쿼리 조건이 있으면 where 붙이기
         if (condDate != null || StringUtils.hasText(condName)) {
             query += " where";
+            allCountQuery += " where";
         }
 
         boolean andFlag = false;    // and 조건 붙이기 위한 플래그
         if (condDate != null) {
             // DB의 update_date 컬럼의 타입이 시, 분, 초가 있으므로 날짜 조건만 맞추기 위해 like 문법 사용
             query += " update_date like concat(:condDate, '%')";
+            allCountQuery += " update_date like concat(:condDate, '%')";
             andFlag = true;         // and 플래그 true 설정
         }
 
@@ -97,13 +104,29 @@ public class SchedulerRepositoryImplV2 implements SchedulerRepository {
             // 날짜 조건이 null이 아니라서 쿼리가 추가 되면 쿼리에 and 추가
             if (andFlag) {
                 query += " and";
+                allCountQuery += " and";
+
             }
             query += " name = :condName";   // 작성자 이름 같은 일정 조회
+            allCountQuery += " name = :condName";
+
         }
 
-        query += " order by update_date desc";
+        int offset = pageable.getPageNumber() * pageable.getPageSize();
+        int limit = pageable.getPageSize();
 
-        return jdbcTemplate.query(query, param, scheduleRowMapper());
+        query += " order by update_date desc limit " + limit + " offset " + offset;
+
+        List<SchedulerFindResponseDto> findAllSchedules = jdbcTemplate.query(query, param, scheduleRowMapper());
+
+        Integer totalCount = jdbcTemplate.queryForObject(allCountQuery, param, Integer.class);
+
+        // 쿼리 결과가 없으면 0으로 반환, todo: 이후에 예외발생으로 변경
+        if (totalCount == null) {
+            totalCount = 0;
+        }
+
+        return new PageImpl<>(findAllSchedules, pageable, totalCount);
     }
 
     @Override
@@ -122,15 +145,15 @@ public class SchedulerRepositoryImplV2 implements SchedulerRepository {
     }
 
     @Override
-    public String findPasswordById(Long id) {
+    public Optional<String> findPasswordById(Long id) {
         String query = "select password from Schedule where id = :id";
         Map<String, Long> param = Map.of("id", id);
 
         // 단건을 조회하는 queryForObject는 못찾으면 EmptyResultDataAccessException이 발생한다고 함
         try {
-            return jdbcTemplate.queryForObject(query, param, String.class);
+            return Optional.ofNullable(jdbcTemplate.queryForObject(query, param, String.class));
         } catch (EmptyResultDataAccessException e) {
-            return null;    // 못찾으면 null
+            return Optional.empty();
         }
     }
 
