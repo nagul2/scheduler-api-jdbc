@@ -9,19 +9,16 @@ import lombok.Getter;
 
 /**
  * 일정 생성, 수정 시 사용되는 공통 요청 DTO
+ * 수정은 이름, 할일 둘중 하나만 수정 가능하도록 NotNull, NotBlank 검증 제거
  */
 @Getter
 @AllArgsConstructor
 public class SchedulerUpdateRequestDto {
 
     @Size(max = 200)
-    @NotNull(message = "할일은 필수 입력값 입니다.")
-    @NotBlank(message = "할일은 필수 입력값 입니다.")
-    private final String content;
+    private final String content;   // 수정은 필수 X
 
-    @NotNull(message = "사용자이름은 필수 입력값 입니다.")
-    @NotBlank(message = "사용자이름은 필수 입력값 입니다.")
-    private final String name;
+    private final String name;      // 수정은 필수 X
 
     @NotNull(message = "비밀번호는 필수 입력값 입니다.")
     @NotBlank(message = "비밀번호는 필수 입력값 입니다.")
