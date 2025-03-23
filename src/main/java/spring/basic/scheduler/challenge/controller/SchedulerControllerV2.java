@@ -1,6 +1,8 @@
 package spring.basic.scheduler.challenge.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +37,8 @@ public class SchedulerControllerV2 {
      * @return 조회된 일정을 리스트로 반환하고 응답코드를 반환
      */
     @GetMapping
-    public ResponseEntity<List<SchedulerFindResponseDto>> findSchedules(SchedulerSearchCond searchCond) {
-        return new ResponseEntity<>(schedulerService.findAllSchedules(searchCond), HttpStatus.OK);
+    public ResponseEntity<Page<SchedulerFindResponseDto>> findSchedules(SchedulerSearchCond searchCond, Pageable pageable) {
+        return new ResponseEntity<>(schedulerService.findAllSchedules(searchCond, pageable), HttpStatus.OK);
     }
 
     /**

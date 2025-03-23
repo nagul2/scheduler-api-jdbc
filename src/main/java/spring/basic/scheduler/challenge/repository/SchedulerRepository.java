@@ -1,5 +1,7 @@
 package spring.basic.scheduler.challenge.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import spring.basic.scheduler.challenge.model.dto.SchedulerFindResponseDto;
 import spring.basic.scheduler.challenge.model.dto.SchedulerSearchCond;
 import spring.basic.scheduler.challenge.model.entity.Schedule;
@@ -12,7 +14,7 @@ public interface SchedulerRepository {
     Long saveSchedule(Schedule schedule);
     Long saveWriter(Writer writer);
 
-    List<SchedulerFindResponseDto> findAllSchedules(SchedulerSearchCond searchCond);
+    Page<SchedulerFindResponseDto> findAllSchedules(SchedulerSearchCond searchCond, Pageable pageable);
 
     Optional<SchedulerFindResponseDto> findScheduleById(Long id);
 

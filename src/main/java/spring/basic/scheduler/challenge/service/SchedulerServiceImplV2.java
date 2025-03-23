@@ -1,6 +1,8 @@
 package spring.basic.scheduler.challenge.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -48,8 +50,8 @@ public class SchedulerServiceImplV2 implements SchedulerService {
     }
 
     @Override
-    public List<SchedulerFindResponseDto> findAllSchedules(SchedulerSearchCond searchCond) {
-        return schedulerRepository.findAllSchedules(searchCond);    // 조회한 일정을 리스트로 반환
+    public Page<SchedulerFindResponseDto> findAllSchedules(SchedulerSearchCond searchCond, Pageable pageable) {
+        return schedulerRepository.findAllSchedules(searchCond, pageable);    // 조회한 일정을 리스트로 반환
     }
 
     @Override
