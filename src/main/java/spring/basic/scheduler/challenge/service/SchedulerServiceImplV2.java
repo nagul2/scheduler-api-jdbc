@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -28,6 +29,7 @@ import java.util.Optional;
 public class SchedulerServiceImplV2 implements SchedulerService {
 
     private final SchedulerRepository schedulerRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -79,21 +81,6 @@ public class SchedulerServiceImplV2 implements SchedulerService {
     }
 
     /**
-     * Schedule 생성하는 메서드
-     *
-     * @param createRequestDto 생성을 위한 요청 정보
-     * @param savedWriterId 생성된 Writer의 id값
-     * @return Schedule 객체
-     */
-    private Schedule createSchedule(SchedulerCreateRequestDto createRequestDto, Long savedWriterId) {
-        return Schedule.builder()
-                .writerId(savedWriterId)    // 반환된 작성자 key 세팅
-                .content(createRequestDto.getContent())
-                .password(createRequestDto.getPassword())
-                .build();
-    }
-
-    /**
      * Writer 생성하는 메서드
      *
      * @param createRequestDto 생성을 위한 요청 정보
@@ -105,6 +92,22 @@ public class SchedulerServiceImplV2 implements SchedulerService {
                 .email(createRequestDto.getEmail())
                 .create_date(LocalDateTime.now())
                 .update_date(LocalDateTime.now())
+                .build();
+    }
+
+    /**
+     * Schedule 생성하는 메서드(패스워드 인코더 적용)
+     *
+     * @param createRequestDto 생성을 위한 요청 정보
+     * @param savedWriterId 생성된 Writer의 id값
+     * @return Schedule 객체
+     */
+    private Schedule createSchedule(SchedulerCreateRequestDto createRequestDto, Long savedWriterId) {
+        String encodedPassword = passwordEncoder.encode(createRequestDto.getPassword());
+        return Schedule.builder()
+                .writerId(savedWriterId)    // 반환된 작성자 key 세팅
+                .content(createRequestDto.getContent())
+                .password(encodedPassword)
                 .build();
     }
 
@@ -149,7 +152,7 @@ public class SchedulerServiceImplV2 implements SchedulerService {
     }
 
     /**
-     * 패스워드 검증을 메서드화
+     * 패스워드 검증을 메서드화(패스워드 인코더 적용)
      *
      * @param id DB에서 조회할 id
      * @param password 요청한 비밀번호
@@ -162,8 +165,7 @@ public class SchedulerServiceImplV2 implements SchedulerService {
             throw new NoSuchScheduleException(ErrorCode.NOT_FOUND_SCHEDULE.getMessage());
         }
 
-        // 필수 구현에서는 별도 예외 처리 없이 비밀번호를 못찾거나 비밀번호가 안맞으면 null을 반환함 -> 도전에서 예외처리하면서 상태코드 반환 예정
-        if (!passwordById.get().equals(password)) {
+        if (!passwordEncoder.matches(password, passwordById.get())) {
             throw new PasswordValidationException(ErrorCode.UNAUTHORIZED_ACCESS.getMessage());
         }
     }
