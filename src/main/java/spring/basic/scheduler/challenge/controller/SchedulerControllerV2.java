@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import spring.basic.scheduler.challenge.model.dto.*;
 import spring.basic.scheduler.challenge.service.SchedulerService;
@@ -23,7 +24,7 @@ public class SchedulerControllerV2 {
      * @return 생성된 일정의 ID와 응답코드를 반환
      */
     @PostMapping
-    public ResponseEntity<SchedulerCommonResponseDto> addSchedule(@RequestBody SchedulerCreateRequestDto createRequestDto) {
+    public ResponseEntity<SchedulerCommonResponseDto> addSchedule(@Validated @RequestBody SchedulerCreateRequestDto createRequestDto) {
         return new ResponseEntity<>(schedulerService.saveSchedule(createRequestDto), HttpStatus.CREATED);
     }
 
@@ -35,7 +36,7 @@ public class SchedulerControllerV2 {
      * @return 조회된 일정을 리스트로 반환하고 응답코드를 반환
      */
     @GetMapping
-    public ResponseEntity<Page<SchedulerFindResponseDto>> findSchedules(SchedulerSearchCond searchCond, Pageable pageable) {
+    public ResponseEntity<Page<SchedulerFindResponseDto>> findSchedules(@Validated SchedulerSearchCond searchCond, Pageable pageable) {
         return new ResponseEntity<>(schedulerService.findAllSchedules(searchCond, pageable), HttpStatus.OK);
     }
 
@@ -59,7 +60,7 @@ public class SchedulerControllerV2 {
      */
     @PutMapping("/{id}")
     public ResponseEntity<SchedulerCommonResponseDto> updateSchedule(@PathVariable Long id,
-                                                                     @RequestBody SchedulerUpdateRequestDto updateRequestDto) {
+                                                                     @Validated @RequestBody SchedulerUpdateRequestDto updateRequestDto) {
         return new ResponseEntity<>(schedulerService.updateSchedule(id, updateRequestDto), HttpStatus.OK);
     }
 
@@ -71,7 +72,8 @@ public class SchedulerControllerV2 {
      * @return 응답코드만 반환
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSchedule(@PathVariable Long id, @RequestBody SchedulerDeleteRequestDto deleteDto) {
+    public ResponseEntity<Void> deleteSchedule(@PathVariable Long id,
+                                               @Validated @RequestBody SchedulerDeleteRequestDto deleteDto) {
         schedulerService.deleteSchedule(id, deleteDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
+    VALID_BAD_REQUEST("400", HttpStatus.BAD_REQUEST, "잘못된 입력값 입니다."),
 
     // password
     UNAUTHORIZED_ACCESS("401", HttpStatus.UNAUTHORIZED, "비밀번호가 틀립니다. 다시 입력해 주세요"),
