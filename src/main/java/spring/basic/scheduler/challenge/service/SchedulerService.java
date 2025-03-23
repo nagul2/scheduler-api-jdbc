@@ -4,8 +4,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import spring.basic.scheduler.challenge.model.dto.*;
 
-import java.util.List;
-
 public interface SchedulerService {
     SchedulerCommonResponseDto saveSchedule(SchedulerCreateRequestDto createRequestDto);
 

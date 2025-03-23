@@ -7,7 +7,6 @@ import spring.basic.scheduler.challenge.model.dto.SchedulerSearchCond;
 import spring.basic.scheduler.challenge.model.entity.Schedule;
 import spring.basic.scheduler.challenge.model.entity.Writer;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface SchedulerRepository {
@@ -18,7 +17,7 @@ public interface SchedulerRepository {
 
     Optional<SchedulerFindResponseDto> findScheduleById(Long id);
 
-    String findPasswordById(Long id);
+    Optional<String> findPasswordById(Long id);
 
     int updateScheduleContent(Long id, String content);
 

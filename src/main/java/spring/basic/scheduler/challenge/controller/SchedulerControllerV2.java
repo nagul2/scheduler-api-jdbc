@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import spring.basic.scheduler.challenge.model.dto.*;
 import spring.basic.scheduler.challenge.service.SchedulerService;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/advanced/scheduler")

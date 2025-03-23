@@ -145,15 +145,15 @@ public class SchedulerRepositoryImplV2 implements SchedulerRepository {
     }
 
     @Override
-    public String findPasswordById(Long id) {
+    public Optional<String> findPasswordById(Long id) {
         String query = "select password from Schedule where id = :id";
         Map<String, Long> param = Map.of("id", id);
 
         // 단건을 조회하는 queryForObject는 못찾으면 EmptyResultDataAccessException이 발생한다고 함
         try {
-            return jdbcTemplate.queryForObject(query, param, String.class);
+            return Optional.ofNullable(jdbcTemplate.queryForObject(query, param, String.class));
         } catch (EmptyResultDataAccessException e) {
-            return null;    // 못찾으면 null
+            return Optional.empty();
         }
     }
 
