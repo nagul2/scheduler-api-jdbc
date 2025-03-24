@@ -11,7 +11,7 @@ import spring.basic.scheduler.challenge.service.SchedulerService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/advanced/scheduler")
+@RequestMapping("/challenge/scheduler")
 public class SchedulerControllerV2 {
 
     private final SchedulerService schedulerService;
