@@ -55,7 +55,7 @@ public class SchedulerServiceImplV2 implements SchedulerService {
 
         // 찾을 ID가 없으면 예외 반환
         if (optionalFindSchedule.isEmpty()) {
-            throw new NoSuchElementException("해당 id로 찾을 수 없습니다.");
+            throw new NoSuchScheduleException("해당 id로 찾을 수 없습니다.");
         }
 
         return optionalFindSchedule.get();
