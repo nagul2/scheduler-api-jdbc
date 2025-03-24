@@ -121,7 +121,7 @@ public class SchedulerRepositoryImplV2 implements SchedulerRepository {
 
         Integer totalCount = jdbcTemplate.queryForObject(allCountQuery, param, Integer.class);
 
-        // 쿼리 결과가 없으면 0으로 반환, todo: 이후에 예외발생으로 변경
+        // 쿼리 결과가 없으면 0으로 반환
         if (totalCount == null) {
             totalCount = 0;
         }
