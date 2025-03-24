@@ -15,7 +15,10 @@
 
 ---
 ## 📝 최종 API 명세서
-
+- PostMan 으로 작성한 API 명세서
+- 필수 단계 RequestMapping : /required/schedule
+- 도전 단계 RequestMapping : /challenge/schedule
+- https://documenter.getpostman.com/view/32918270/2sAYkGJyMR
 
 ---
 ## 📌 구현 기능
