@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/advanced/scheduler")
+@RequestMapping("/challenge/scheduler")
 public class SchedulerControllerV2 {
 
     private final SchedulerService schedulerService;
