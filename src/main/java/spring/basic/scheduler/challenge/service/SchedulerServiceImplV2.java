@@ -15,6 +15,7 @@ import spring.basic.scheduler.challenge.model.dto.*;
 import spring.basic.scheduler.challenge.model.entity.Schedule;
 import spring.basic.scheduler.challenge.model.entity.Writer;
 import spring.basic.scheduler.challenge.repository.SchedulerRepository;
+import spring.basic.scheduler.challenge.repository.WriterRepository;
 
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
@@ -29,6 +30,7 @@ import java.util.Optional;
 public class SchedulerServiceImplV2 implements SchedulerService {
 
     private final SchedulerRepository schedulerRepository;
+    private final WriterRepository writerRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -36,7 +38,7 @@ public class SchedulerServiceImplV2 implements SchedulerService {
     public SchedulerCommonResponseDto saveSchedule(SchedulerCreateRequestDto createRequestDto) {
 
         Writer writer = createWriter(createRequestDto);                    // Writer 생성
-        Long savedWriterId = schedulerRepository.saveWriter(writer);       // 작성자 정보부터 DB에 저장하고 key 반환
+        Long savedWriterId = writerRepository.saveWriter(writer);       // 작성자 정보부터 DB에 저장하고 key 반환
 
         Schedule schedule = createSchedule(createRequestDto, savedWriterId); // Schedule 생성
         Long savedScheduleId = schedulerRepository.saveSchedule(schedule);  // 일정 DB 저장하고 Key 반환
@@ -125,7 +127,7 @@ public class SchedulerServiceImplV2 implements SchedulerService {
 
         } else if (StringUtils.hasText(updateRequestDto.getName()) && !StringUtils.hasText(updateRequestDto.getContent())) {
             // 이름만 수정
-            updatedRow = schedulerRepository.updateWriterName(id, updateRequestDto.getName());
+            updatedRow = writerRepository.updateWriterName(id, updateRequestDto.getName());
 
         } else {
             // 전체 수정

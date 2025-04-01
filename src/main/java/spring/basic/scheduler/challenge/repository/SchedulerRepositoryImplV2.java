@@ -16,7 +16,6 @@ import org.springframework.util.StringUtils;
 import spring.basic.scheduler.challenge.model.dto.SchedulerFindResponseDto;
 import spring.basic.scheduler.challenge.model.dto.SchedulerSearchCond;
 import spring.basic.scheduler.challenge.model.entity.Schedule;
-import spring.basic.scheduler.challenge.model.entity.Writer;
 
 import javax.sql.DataSource;
 import java.time.LocalDate;
@@ -29,7 +28,6 @@ public class SchedulerRepositoryImplV2 implements SchedulerRepository {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert schedulerJdbcInsert;
-    private final SimpleJdbcInsert writerJdbcInsert;
 
     public SchedulerRepositoryImplV2(DataSource dataSource) {
         // 바인딩 순서로 쿼리하면 버그가 생길 수 있으므로 파라미터 이름으로 쿼리를 할 수 있는 JdbcTemplate
@@ -38,23 +36,8 @@ public class SchedulerRepositoryImplV2 implements SchedulerRepository {
                 .withTableName("schedule")
                 .usingGeneratedKeyColumns("id");
 
-        this.writerJdbcInsert = new SimpleJdbcInsert(dataSource)  // Insert 편의 기능 활용
-                .withTableName("writer")
-                .usingGeneratedKeyColumns("id");
     }
 
-    /**
-     * 작성자 정보를 DB에 저장하는 메서드
-     *
-     * @param writer 작성자 정보
-     * @return 테이블에 저장된 작성자 key
-     */
-    @Override
-    public Long saveWriter(Writer writer) {
-        SqlParameterSource writerParam = new BeanPropertySqlParameterSource(writer);
-        Number writerKey = writerJdbcInsert.executeAndReturnKey(writerParam);
-        return writerKey.longValue();
-    }
 
     /**
      * 일정 정보를 DB에 저장하는 메서드
@@ -179,23 +162,6 @@ public class SchedulerRepositoryImplV2 implements SchedulerRepository {
         return jdbcTemplate.update(query, param);
     }
 
-    /**
-     * 작성자만 수정, 작성자 테이블의 수정일은 최신화
-     *
-     * @param id 수정할 일정의 ID
-     * @param name 수정할 작성자 이름
-     * @return 수정된 행의 개수
-     */
-    @Override
-    public int updateWriterName(Long id, String name) {
-        String query = "update writer set name = :name, update_date = now() where id = :id";
-
-        SqlParameterSource param = new MapSqlParameterSource()
-                .addValue("id", id)
-                .addValue("name", name);
-
-        return jdbcTemplate.update(query, param);
-    }
 
     /**
      * 작성자, 일정 모두 수정, 수정일 최신화

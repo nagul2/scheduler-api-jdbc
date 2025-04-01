@@ -11,7 +11,6 @@ import java.util.Optional;
 
 public interface SchedulerRepository {
     Long saveSchedule(Schedule schedule);
-    Long saveWriter(Writer writer);
 
     Page<SchedulerFindResponseDto> findAllSchedules(SchedulerSearchCond searchCond, Pageable pageable);
 
@@ -20,8 +19,6 @@ public interface SchedulerRepository {
     Optional<String> findPasswordById(Long id);
 
     int updateScheduleContent(Long id, String content);
-
-    int updateWriterName(Long id, String name);
 
     int updateScheduleContentWithWriterName(Long id, String content, String name);
 
